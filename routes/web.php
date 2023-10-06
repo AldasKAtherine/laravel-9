@@ -1,35 +1,24 @@
 <?php
-use App\Http\Controllers\PageController;
+
 use Illuminate\Support\Facades\Route;
-
-/*
-Reoute::get consultar
-post guardar
-delete eliminar
-put actualizar
-*/
-/*
-Route::get('/', [PageController::class, 'home'])->name('home');
-
-Route::get('blog', [PageController::class, 'blog'])->name('blog');
-    //consilta a base de datos
-    // $posts=[
-    //     ['id'=>1, 'title'=>'PHP', 'slug'=>'php'],
-    //     ['id'=>1, 'title'=>'laravel', 'slug'=>'laravel'],
-    // ];
-    // return view('blog',['posts'=>$posts]);
+use App\Http\Controllers\PageController;
 
 
-Route::get('blog/{slug}', [PageController::class, 'post'])->name('post');
-    // $post = $slug;
-
-    //   return view('post',['post'=>$post]);
-
-
-*/
 Route::controller(PageController::class)->group(function(){
     Route::get('/','home' )->name('home');
     Route::get('blog',  'blog')->name('blog');
     Route::get('blog/{post:slug}', 'post')->name('post');
   
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
