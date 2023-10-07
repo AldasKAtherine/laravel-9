@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\ProfileController;
 
 
 Route::controller(PageController::class)->group(function(){
@@ -21,4 +23,5 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::resource('posts', PostController::class)->except(['show']);
 require __DIR__.'/auth.php';
